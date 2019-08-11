@@ -1,0 +1,39 @@
+h1 {}
+
+h2 {}
+
+h3 {}
+
+h4 {}
+
+h5 {}
+
+h6 {}
+
+p {}
+
+hr {
+    margin: space(p) 0;
+    border-bottom: 1px solid color(light, darken);
+}
+
+ul {
+    li {}
+}
+
+a {
+   color: inherit;
+
+   &:hover {
+        color: inherit;
+        text-decoration: underline;
+   }
+}
+
+em {
+    font-style: italic
+}
+
+strong {
+    @include font(bold);
+}

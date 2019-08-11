@@ -1,0 +1,284 @@
+/* Variables */
+/*------------------------------------*\
+    VENDORS
+\*------------------------------------*/
+@import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
+/*------------------------------------*\
+    RESET
+\*------------------------------------*/
+html, body, main, article, nav, aside, section,
+header, footer, address, div,
+h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li, dl, dt, dd,
+hr, pre, figure, figcaption,
+table, caption, thead, tbody, tfoot, tr, th, td, col, colgroup,
+form, fieldset, legend, label, input, button, select, datalist,
+optgroup, option, textarea, progress, meter,
+img, iframe, embed, object, param, video, audio, source,
+canvas, track, map, area, del, ins,
+a, em, strong, i, b, u, s, small, abbr, q, cite, dfn, sub, sup,
+time, code, kbd, samp, var, bdi, bdo, ruby, rt, rp, wbr,
+mark, span, br {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent; }
+
+:after,
+:before {
+  box-sizing: border-box; }
+
+button,
+select,
+textarea,
+input {
+  color: inherit;
+  font-family: inherit;
+  vertical-align: middle;
+  max-width: 100%; }
+
+a {
+  text-decoration: none; }
+  a img,
+  a svg {
+    display: block;
+    border: none;
+    max-width: 100%; }
+
+img,
+svg {
+  max-width: 100%;
+  border: none; }
+
+li {
+  list-style: none; }
+
+hr {
+  border: 0; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+caption,
+th,
+td {
+  text-align: left; }
+
+:focus {
+  outline: none; }
+
+[hidden], [data-hidden="true"] {
+  display: none; }
+
+/*------------------------------------*\
+    TYPOGRAPHY
+\*------------------------------------*/
+hr {
+  margin: 8px 0;
+  border-bottom: 1px solid; }
+
+a {
+  color: inherit; }
+  a:hover {
+    color: inherit;
+    text-decoration: underline; }
+
+em {
+  font-style: italic; }
+
+strong {
+  font-family: Roboto;
+  font-weight: 700; }
+
+/*------------------------------------*\
+    INPUT
+\*------------------------------------*/
+/*------------------------------------*\
+    INPUT
+\*------------------------------------*/
+input::placeholder {
+  color: inherit; }
+
+/*------------------------------------*\
+    TEXTAREA
+\*------------------------------------*/
+/*------------------------------------*\
+    SELECT
+\*------------------------------------*/
+/*------------------------------------*\
+    BUTTONS
+\*------------------------------------*/
+/*------------------------------------*\
+    HEADER
+\*------------------------------------*/
+header {
+  padding: 16px;
+  min-height: 80px;
+  background: rgba(37, 41, 51, 0.1);
+  color: #ffffff; }
+  @media (min-width: 75em) {
+    header {
+      max-height: 100px; } }
+  header h1 {
+    font-family: Roboto;
+    font-weight: 500;
+    background-image: url("../images/sprite.png");
+    background-position: 0px 0px;
+    width: 259px;
+    height: 58px;
+    overflow: hidden;
+    text-indent: -9999px; }
+  header nav {
+    position: absolute;
+    top: -1000em;
+    left: -16px;
+    width: 100vw;
+    padding: 24px;
+    background: rgba(37, 41, 51, 0.1); }
+    @media (min-width: 75em) {
+      header nav {
+        position: inherit;
+        top: inherit;
+        left: inherit;
+        width: inherit;
+        padding: inherit;
+        background: inherit; } }
+    header nav.open {
+      top: 16px; }
+    @media (min-width: 75em) {
+      header nav ul {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 70px; } }
+    @media (min-width: 75em) {
+      header nav ul li {
+        margin-left: 8px; } }
+
+/*------------------------------------*\
+    BODY
+\*------------------------------------*/
+html {
+  font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;
+  font-weight: 400;
+  font-size: 16px; }
+  @media (max-width: 48em) {
+    html {
+      font-size: 16px; } }
+
+body {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden; }
+  @media (min-width: 75em) {
+    body {
+      -webkit-overflow-scrolling: inherit;
+      overflow-x: inherit; } }
+
+/*------------------------------------*\
+    MAIN
+\*------------------------------------*/
+main {
+  height: calc(100vh - 316px); }
+
+/*------------------------------------*\
+    SECTION
+\*------------------------------------*/
+/*------------------------------------*\
+    ARTICLE
+\*------------------------------------*/
+/*------------------------------------*\
+    FOOTER
+\*------------------------------------*/
+footer {
+  padding: 32px 16px;
+  background: #252933;
+  color: #ffffff; }
+  footer h6 {
+    font-family: Roboto;
+    font-weight: 500;
+    background-image: url("../images/sprite.png");
+    background-position: 0px 0px;
+    width: 259px;
+    height: 58px;
+    overflow: hidden;
+    text-indent: -9999px;
+    display: inline-block;
+    transform: scale(0.7); }
+  @media (min-width: 75em) {
+    footer nav ul {
+      display: flex;
+      justify-content: center;
+      align-items: center; } }
+  @media (min-width: 75em) {
+    footer nav ul li {
+      margin-left: 8px; } }
+
+/*------------------------------------*\
+    HELPERS
+\*------------------------------------*/
+.row.no-gutters {
+  margin-right: 0;
+  margin-left: 0; }
+
+.row.no-gutters > [class^="col-"],
+.row.no-gutters > [class*=" col-"] {
+  padding-right: 0;
+  padding-left: 0;
+  margin-right: 0;
+  margin-left: 0; }
+
+.margin-left {
+  margin-left: 15px; }
+
+.margin-right {
+  margin-right: 15px; }
+
+.nopad-left {
+  padding-left: 0; }
+
+.nopad-right {
+  padding-right: 0; }
+
+@media (max-width: 640px) {
+  .center-block-mobile {
+    float: none !important;
+    display: block;
+    margin-left: auto !important;
+    margin-right: auto !important; }
+  .text-center-mobile {
+    text-align: center; } }
+
+.center-block {
+  float: none !important;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important; }
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none; }
+  @media (max-width: 767px) {
+    .vcenter {
+      display: inherit;
+      float: inherit; } }
+
+.vbottom {
+  display: inline-block;
+  vertical-align: bottom;
+  float: none; }
+
+.letter-spacing {
+  letter-spacing: 2px; }
+
+label {
+  white-space: nowrap; }
+
+.position-absolute {
+  position: relative !important; }
+  @media (min-width: 75em) {
+    .position-absolute {
+      position: absolute !important; } }

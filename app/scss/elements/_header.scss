@@ -1,0 +1,59 @@
+header {
+    @include responsive(large) {
+        max-height: 100px;
+    }
+
+    padding: space(base);
+    min-height: 80px;
+
+    background: adjust-color(color(dark), $lightness: 0%, $alpha: -0.9);
+    color: color(light);
+
+    h1 {
+        @include font(medium);
+        @include sprite($logo);
+        @include hidden-text();
+    }
+
+    nav {
+        @include responsive(large) {
+            position: inherit;
+            top: inherit;
+            left: inherit;
+
+            width: inherit;
+            padding: inherit;
+
+            background: inherit;
+        }
+
+        position: absolute;
+        top: -1000em;
+        left: -16px;
+
+        width: 100vw;
+        padding: space(m);
+
+        background: adjust-color(color(dark), $lightness: 0%, $alpha: -0.9);
+
+        &.open {
+            top: 16px;
+        }
+
+        ul {
+            @include responsive(large) {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                height: 70px;
+            }
+
+            li {
+                @include responsive(large) {
+                    margin-left: space(p);
+                }
+            }
+        }
+    }
+}

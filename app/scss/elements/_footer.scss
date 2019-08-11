@@ -1,0 +1,31 @@
+footer {
+    padding: space(g) space(base);
+
+    background: color(dark);
+    color: color(light);
+
+    h6 {
+        @include font(medium);
+        @include sprite($logo);
+        @include hidden-text();
+
+        display: inline-block;
+        transform: scale(0.7);
+    }
+
+    nav {
+        ul {
+            @include responsive(large) {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            li {
+                @include responsive(large) {
+                    margin-left: space(p);
+                }
+            }
+        }
+    }
+}
