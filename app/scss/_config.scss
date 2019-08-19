@@ -6,10 +6,12 @@
 $colors: (
   primary     : #ff8901,
   light: (
+    lighter    : #e9e9e9,
     lighten    : #f6f6f6,
-    base      : #ffffff,
+    base       : #ffffff,
   ),
   dark: (
+    darken    : #5e5e5e,
     base      : #252933,
   ),
   danger      : #f85757,

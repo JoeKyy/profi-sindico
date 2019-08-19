@@ -1,2 +1,17 @@
 textarea {
+    &::placeholder {
+        color: color(dark, darken);
+    }
+
+    @include font(light);
+
+    padding: space(base);
+    width: 100%;
+
+    font-size: font-size(normal);
+    color: color(dark);
+
+    background-color: color(light);
+    border: 1px solid color(light, lighter);
+    border-radius: 0px;
 }

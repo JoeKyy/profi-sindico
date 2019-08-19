@@ -75,9 +75,49 @@ td {
 /*------------------------------------*\
     TYPOGRAPHY
 \*------------------------------------*/
+h1,
+.h1 {
+  font-family: Roboto;
+  font-weight: 300;
+  font-size: 1.875rem; }
+
+h2,
+.h2 {
+  font-family: Roboto;
+  font-weight: 300;
+  margin: 16px 0;
+  font-size: 1.875rem; }
+
+h3,
+.h3 {
+  margin: 16px 0;
+  font-size: 1.125rem; }
+
+h4,
+.h4 {
+  margin: 16px 0;
+  font-size: 1rem; }
+
+h5,
+.h5 {
+  margin: 16px 0;
+  font-size: 0.875rem; }
+
+h6,
+.h6 {
+  margin: 16px 0;
+  font-size: 0.75rem; }
+
+p {
+  margin-bottom: 16px;
+  font-size: 0.875rem; }
+
 hr {
   margin: 8px 0;
   border-bottom: 1px solid; }
+
+ul li {
+  font-size: 0.875rem; }
 
 a {
   color: inherit; }
@@ -92,31 +132,104 @@ strong {
   font-family: Roboto;
   font-weight: 700; }
 
+img {
+  max-width: 100%;
+  width: 100%; }
+
+.text-size-big {
+  font-size: 1.875rem !important; }
+
+.text-size-large {
+  font-size: 1.125rem !important; }
+
+.text-size-medium {
+  font-size: 1rem !important; }
+
+.text-size-normal {
+  font-size: 0.875rem !important; }
+
+.text-size-small {
+  font-size: 0.75rem !important; }
+
 /*------------------------------------*\
     INPUT
 \*------------------------------------*/
 /*------------------------------------*\
     INPUT
 \*------------------------------------*/
-input::placeholder {
-  color: inherit; }
+input {
+  font-family: Roboto;
+  font-weight: 300;
+  padding: 16px;
+  width: 100%;
+  height: 40px;
+  font-size: 0.875rem;
+  color: #252933;
+  background-color: #ffffff;
+  border: 1px solid #e9e9e9;
+  border-radius: 0px; }
+  input::placeholder {
+    color: #5e5e5e; }
 
 /*------------------------------------*\
     TEXTAREA
 \*------------------------------------*/
+textarea {
+  font-family: Roboto;
+  font-weight: 300;
+  padding: 16px;
+  width: 100%;
+  font-size: 0.875rem;
+  color: #252933;
+  background-color: #ffffff;
+  border: 1px solid #e9e9e9;
+  border-radius: 0px; }
+  textarea::placeholder {
+    color: #5e5e5e; }
+
 /*------------------------------------*\
     SELECT
 \*------------------------------------*/
 /*------------------------------------*\
     BUTTONS
 \*------------------------------------*/
+a.btn,
+[type="submit"].btn,
+button.btn {
+  font-family: Roboto;
+  font-weight: 300;
+  padding: 8px;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 0px; }
+  a.btn-primary,
+  [type="submit"].btn-primary,
+  button.btn-primary {
+    color: #ffffff;
+    background-color: #ff8901; }
+    a.btn-primary:hover,
+    [type="submit"].btn-primary:hover,
+    button.btn-primary:hover {
+      background-color: #e77b00; }
+    a.btn-primary:active, a.btn-primary:focus,
+    [type="submit"].btn-primary:active,
+    [type="submit"].btn-primary:focus,
+    button.btn-primary:active,
+    button.btn-primary:focus {
+      background-color: #cd6e00 !important;
+      border: none !important; }
+
 /*------------------------------------*\
     HEADER
 \*------------------------------------*/
 header {
+  position: fixed;
+  z-index: 10;
+  top: 0;
   padding: 16px;
+  width: 100%;
   min-height: 80px;
-  background: rgba(37, 41, 51, 0.1);
+  background: rgba(37, 41, 51, 0.5);
   color: #ffffff; }
   @media (min-width: 75em) {
     header {
@@ -155,7 +268,7 @@ header {
         height: 70px; } }
     @media (min-width: 75em) {
       header nav ul li {
-        margin-left: 8px; } }
+        margin-left: 16px; } }
 
 /*------------------------------------*\
     BODY
@@ -181,11 +294,94 @@ body {
     MAIN
 \*------------------------------------*/
 main {
-  height: calc(100vh - 316px); }
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 216px); }
 
 /*------------------------------------*\
     SECTION
 \*------------------------------------*/
+section#topo {
+  position: relative;
+  z-index: 1; }
+  section#topo img {
+    max-width: inherit;
+    width: inherit; }
+    @media (min-width: 48.0625em) {
+      section#topo img {
+        max-width: 100%;
+        width: 100%;
+        min-height: inherit; } }
+  section#topo .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto auto; }
+    section#topo .container > .row {
+      align-content: center;
+      margin-top: 32px;
+      height: 100%; }
+      section#topo .container > .row h2 {
+        color: #ffffff; }
+
+section#servicos, section#trabalhos-realizados, section#fale-conosco {
+  padding: 48px 0;
+  background-color: #ffffff;
+  color: #252933; }
+  section#servicos h2, section#trabalhos-realizados h2, section#fale-conosco h2 {
+    color: #252933; }
+  section#servicos .card-image, section#trabalhos-realizados .card-image, section#fale-conosco .card-image {
+    margin: 8px 0; }
+    section#servicos .card-image div, section#trabalhos-realizados .card-image div, section#fale-conosco .card-image div {
+      position: relative; }
+      section#servicos .card-image div a, section#trabalhos-realizados .card-image div a, section#fale-conosco .card-image div a {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(37, 41, 51, 0.5); }
+        section#servicos .card-image div a p, section#trabalhos-realizados .card-image div a p, section#fale-conosco .card-image div a p {
+          font-size: 1.125rem;
+          text-align: center;
+          color: #ffffff; }
+          section#servicos .card-image div a p strong, section#trabalhos-realizados .card-image div a p strong, section#fale-conosco .card-image div a p strong {
+            display: block; }
+
+section#eventos {
+  padding: 48px 0;
+  background-color: #f6f6f6;
+  color: #252933; }
+  section#eventos h2 {
+    color: #252933; }
+  section#eventos .nav-link {
+    padding: 16px 0; }
+    section#eventos .nav-link.active {
+      font-family: Roboto;
+      font-weight: 700;
+      background-color: inherit;
+      color: #252933; }
+
+section#sobre-nos {
+  margin-top: -8px;
+  padding: 48px 0;
+  background-color: #252933;
+  color: #ffffff; }
+  section#sobre-nos h2 {
+    color: #ff8901; }
+
+section#na-midia {
+  padding: 48px 0;
+  background-color: #ff8901;
+  color: #ffffff; }
+  section#na-midia h2 {
+    color: #ffffff; }
+
 /*------------------------------------*\
     ARTICLE
 \*------------------------------------*/
@@ -193,6 +389,9 @@ main {
     FOOTER
 \*------------------------------------*/
 footer {
+  position: relative;
+  z-index: 1;
+  margin-top: -8px;
   padding: 32px 16px;
   background: #252933;
   color: #ffffff; }

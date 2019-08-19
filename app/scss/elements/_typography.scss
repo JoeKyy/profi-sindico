@@ -1,16 +1,52 @@
-h1 {}
+h1,
+.h1 {
+    @include font(light);
 
-h2 {}
+    font-size: font-size(big);
+}
 
-h3 {}
+h2,
+.h2 {
+    @include font(light);
 
-h4 {}
+    margin: space(base) 0;
 
-h5 {}
+    font-size: font-size(big);
+}
 
-h6 {}
+h3,
+.h3 {
+    margin: space(base) 0;
 
-p {}
+    font-size: font-size(large);
+}
+
+h4,
+.h4 {
+    margin: space(base) 0;
+
+    font-size: font-size(medium);
+}
+
+h5,
+.h5 {
+    margin: space(base) 0;
+
+    font-size: font-size(normal);
+}
+
+h6,
+.h6 {
+    margin: space(base) 0;
+
+    font-size: font-size(small);
+}
+
+p {
+    margin-bottom: space(base);
+
+    font-size: font-size(normal);
+}
 
 hr {
     margin: space(p) 0;
@@ -18,7 +54,9 @@ hr {
 }
 
 ul {
-    li {}
+    li {
+        font-size: font-size(normal);
+    }
 }
 
 a {
@@ -36,4 +74,25 @@ em {
 
 strong {
     @include font(bold);
+}
+
+img {
+    max-width: 100%;
+    width: 100%;
+}
+
+.text-size-big {
+    font-size: font-size(big) !important;
+}
+.text-size-large {
+    font-size: font-size(large) !important;
+}
+.text-size-medium {
+    font-size: font-size(medium) !important;
+}
+.text-size-normal {
+    font-size: font-size(normal) !important;
+}
+.text-size-small {
+    font-size: font-size(small) !important;
 }

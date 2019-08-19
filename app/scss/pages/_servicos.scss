@@ -1,0 +1,44 @@
+&#servicos,
+&#trabalhos-realizados,
+&#fale-conosco {
+    padding: space(gg) 0;
+
+    background-color: color(light);
+    color: color(dark);
+
+    h2 {
+        color: color(dark);
+    }
+
+    .card-image {
+        margin: space(p) 0;
+
+        div {
+            position: relative;
+
+            a {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                background: adjust-color(color(dark), $lightness: 0%, $alpha: -0.5);
+
+                p {
+                    font-size: font-size(large);
+                    text-align: center;
+                    color: color(light);
+
+                    strong {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,10 +2,27 @@ a,
 [type="submit"],
 button{
 	&.btn {
+		@include font(light);
 
+		padding: space(p);
+
+		font-size: font-size(normal);
+		border: none;
+		border-radius: 0px;
 
 		&-primary {
+			color: color(light);
+			background-color: color(primary);
 
+			&:hover {
+				background-color: darken($color: color(primary), $amount: 5);
+			}
+
+			&:active,
+			&:focus {
+				background-color: darken($color: color(primary), $amount: 10) !important;
+				border: none !important;
+			}
 		}
 	}
 }

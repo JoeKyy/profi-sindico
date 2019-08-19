@@ -1,0 +1,21 @@
+&#eventos {
+    padding: space(gg) 0;
+
+    background-color: color(light, lighten);
+    color: color(dark);
+
+    h2 {
+        color: color(dark);
+    }
+
+    .nav-link {
+        padding: space(base) 0;
+
+        &.active {
+            @include font(bold);
+
+            background-color: inherit;
+            color: color(dark);
+        }
+    }
+}

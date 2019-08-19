@@ -62,6 +62,7 @@ gulp.task('watch', function () {
   gulp.watch('app/images/sprites/*.*', ['sprite']);
   gulp.watch('app/scss/**/*.scss', ['sass']);
   gulp.watch('app/scss/**/**/*.scss', ['sass'])
+  gulp.watch('app/scss/**/**/**/*.scss', ['sass'])
   gulp.watch('app/*.html', browserSync.reload);
   gulp.watch('app/js/**/*.js', browserSync.reload);
 })
