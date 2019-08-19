@@ -303,7 +303,12 @@ main {
 \*------------------------------------*/
 section#topo {
   position: relative;
-  z-index: 1; }
+  z-index: 1;
+  overflow: hidden;
+  width: 100%; }
+  @media (min-width: 48.0625em) {
+    section#topo {
+      overflow: inherit; } }
   section#topo img {
     max-width: inherit;
     width: inherit; }
@@ -318,7 +323,10 @@ section#topo {
     left: 0;
     right: 0;
     bottom: 0;
-    margin: auto auto; }
+    margin: 100px auto auto; }
+    @media (min-width: 48.0625em) {
+      section#topo .container {
+        margin: auto; } }
     section#topo .container > .row {
       align-content: center;
       margin-top: 32px;

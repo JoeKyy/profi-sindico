@@ -1,6 +1,13 @@
 &#topo {
+    @include responsive(medium) {
+        overflow: inherit;
+    }
+
     position: relative;
     z-index: 1;
+    overflow: hidden;
+
+    width: 100%;
 
     img {
         @include responsive(medium) {
@@ -14,13 +21,17 @@
     }
 
     .container {
+        @include responsive(medium) {
+            margin: auto;
+        }
+
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
 
-        margin: auto auto;
+        margin: 100px auto auto;
 
         > .row {
             align-content: center;
