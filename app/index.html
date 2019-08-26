@@ -1,3 +1,69 @@
+<?php
+    error_reporting( E_ALL );
+    ini_set( 'display_errors', 1 );
+	if (isset($_POST["submit"])) {
+		$name = $_POST['nome'];
+		$email = $_POST['email'];
+		$tel = $_POST['tel'];
+		$message = $_POST['textarea'];
+		$human = intval($_POST['human']);
+		$from = $_POST['email'];
+		$to = 'contato@joekyy.com.br';
+		$subject = '[Contato] Profi-Sindico';
+        $headers = 'From: '.$from."\r\n".'Reply-To: '.$from."\r\n" .'X-Mailer: PHP/' . phpversion();
+
+		$body ="De: $name\nE-mail: $email\nTelefone: $tel\nMensagem:\n$message";
+        // Check if name has been entered
+        // Check if name has been entered
+        if (!isset($_POST) || !key_exists('nome', $_POST)) {
+            $errName = 'Verifique seu nome';
+        }
+
+		// Check if email has been entered and is valid
+        if (!isset($_POST) || !key_exists('email', $_POST) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            $errEmail = 'Digite um email valido';
+        }
+
+        //Check if message has been entered
+        if (!isset($_POST) || !key_exists('textarea', $_POST)) {
+            $errMessage = 'Escreva sua mensagem';
+        }
+		//Check if simple anti-bot test is correct
+        if (!isset($human) || $human !== 5) {
+            $errHuman = 'Sua resposta está incorreta';
+        }
+        // If there are no errors, send the email
+        if (!isset($errName) && !isset($errEmail) && !isset($errMessage) && !isset($errHuman)) {
+            $result = mail($to, $subject, $body, $headers);
+            if (isset($result)) {
+                $result = '<div class="alert alert-success">Obrigado, entraremos em contato</div>';
+            } else {
+                $result = '<div class="alert alert-danger">Desculpe, ocorreu um erro em sua mensagem, por favor, tente novamente mais tarde.</div>';
+            }
+        }
+    }
+
+    /**
+     * if you want to send real mail, substitute mail for fakemail
+     * with the same parameters.
+     *
+     * @param $to
+     * @param $subject
+     * @param $body
+     * @param $from
+     * @return string faking mail output.
+     */
+    function fakemail($to, $subject, $body, $from) {
+        $result = "<br/>Sending email to $to from $from with subject $subject and body <p>$body</p>";
+        return $result;
+    }
+    function showPost($name) {
+        if (isset($_POST[$name])) {
+            echo htmlspecialchars($_POST[$name]);
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -9,21 +75,6 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="apple-touch-icon" sizes="57x57" href="images/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="images/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="images/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="https://use.fontawesome.com/76a2f25f06.css" rel="stylesheet">
@@ -70,32 +121,50 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <form action="">
+                                <form role="form" method="post" action="index.php#topo">
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <input type="text" name="nome" placeholder="Nome">
+                                            <input type="text" id="nome" name="nome" size="40" placeholder="Nome completo"
+                                                value="<?php showPost('nome'); ?>">
+                                            <?php if (isset($errName)) echo "<p class='text-danger'>$errName</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <input type="email" name="email" placeholder="E-mail">
+                                            <input type="email" id="email" name="email" size="40" placeholder="E-mail"
+                                                value="<?php showPost('email'); ?>">
+                                            <?php if (isset($errEmail)) echo "<p class='text-danger'>$errEmail</p>";?>
+                                        </div>
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col-lg-6 pr-lg-2">
+                                            <input type="tel" id="tel" name="tel" value="<?php showPost('tel'); ?>"
+                                                size="40" placeholder="Telefone" />
+                                        </div>
+                                        <div class="col-lg-6 pl-lg-2">
+                                                <input type="text" id="human" name="human" placeholder="2 + 3 = ?" size="40"
+                                                    value="<?php showPost('human'); ?>">
+                                            <?php if (isset($errHuman)) echo "<p class='text-danger'>$errHuman</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <input type="tel" name="tel"  placeholder="Telefone (XX) XXXX-XXXX">
+                                            <textarea id="textarea" name="textarea" cols="40" rows="5" placeholder="Mensagem"><?php showPost('message');?></textarea>
+                                            <?php if (isset($errMessage)) echo "<p class='text-danger'>$errMessage</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <textarea name="message" placeholder="Mensagem" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row my-2">
-                                        <div class="col-lg-12">
-                                            <button type="submit" class="btn btn-block btn-primary">
+                                            <button id="submit" name="submit" type="submit" value="Enviar" role="button" class="btn btn-block btn-primary">
                                                 Enviar
                                             </button>
+                                        </div>
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col-lg-12">
+                                            <p>
+                                                <?php if (isset($result)) {echo $result;} ?>
+                                            </p>
                                         </div>
                                     </div>
                                 </form>
@@ -113,20 +182,12 @@
                             <div class="col-lg-8">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h2>Quem somos</h2>
-                                        <p>Após ser sindica, Marta sentiu necessidade de desenvolver um trabalho mais profissional que facilitaria a realização das ações necessárias com mais eficiência, agilizando e melhorando o dia a dia do condomínio:</p>
-                                        <p><strong>Maior integração com os tramites realizados pelas administradoras</strong></p>
-                                        <p><strong>Aperfeiçoamento por meio de leitura especializada e pesquisas</strong></p>
-                                        <p><strong>Qualificação educacional</strong></p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h2>Nosso projeto</h2>
-                                        <p>Em 2010, o PROF-SINDICO foi criado, sendo especializado em soluções para condomínios.</p>
-                                        <p><strong>Assessoria a Construtoras</strong></p>
-                                        <p><strong>Patrimônio de Afetação</strong></p>
-                                        <p><strong>Assessoria a Condomínios Comerciais e Residências</strong>.</p>
+                                        <h2>Sobre nós</h2>
+                                        <p>Marta Girardin, diretora, iniciou como síndica em 2005. A partir desta experiência, sentiu necessidade de desenvolver um trabalho mais profissional que facilitaria a realização das ações necessárias com mais eficiência melhorando o dia a dia do condomínio.</p>
+                                        <p>Com sua formação em técnico de contabilidade procurou maior integração com os tramites realizados pelas administradoras.</p>
+                                        <p>Começou a interessar-se cada vez mais pelo assunto e procurou aperfeiçoar-se através de leitura especializada e pesquisas.</p>
+                                        <p>Usando a experiência diária desenvolvida em suas gestões como sindica e após a conclusão do curso de administração condominial na FMU em 2008, foi incentivada a criar a Profi-Sindico em 2010, uma empresa especializada em soluções para condomínios, com um novo conceito de gestão.</p>
+                                        <p>Atendendo às necessidades do mercado, ampliou sua gama de serviços; passou a realizar também assessoria a Construtoras, Patrimônio de Afetação, Assessoria a Condomínios Comerciais e Residências.</p>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +198,7 @@
                             <div class="col-lg-12">
                                 <h2 class="mb-0">Marta Girardin</h2>
                                 <p>Síndica profissional e Diretora</p>
-                                <img src="images/img-marta.png" alt="">
+                                <img src="images/img-marta.png" alt="Marta Girardin">
                                 <p class="my-2">
                                     Formação:<br />
                                     - Técnico de contabilidade<br />
@@ -148,17 +209,19 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <p>Certificados:</p>
-                                <div class="row">
-                                    <div class="col">
-                                        <img src="images/img-certificado-01.png" alt="">
+                                <a data-toggle="modal" data-target="#certificados">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img src="images/img-certificado-01.png" alt="">
+                                        </div>
+                                        <div class="col">
+                                            <img src="images/img-certificado-02.png" alt="">
+                                        </div>
+                                        <div class="col">
+                                            <img src="images/img-certificado-03.png" alt="">
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <img src="images/img-certificado-02.png" alt="">
-                                    </div>
-                                    <div class="col">
-                                        <img src="images/img-certificado-03.png" alt="">
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -195,7 +258,7 @@
                             <div class="col-lg-12 text-lg-right text-left">
                                 <h3 class="h2 mt-0">Patrimônio de Afetação</h3>
                                 <p>Realização de Assembleia para Eleição da Comissão de Representação dos adquirentes do empreendimento e elaboração da Ata da Assembleia.</p>
-                                <p>Esclarecimento sobre a constituição do patrimônio de afetação, no termode acordo com a redação dada pela Lei 10.931/2004 referentes aos Artigos 31-A a 31F e da Lei 4591/1964.</p>
+                                <p>Esclarecimento sobre a constituição do patrimônio de afetação, no termo de acordo com a redação dada pela Lei 10.931/2004 referentes aos Artigos 31-A a 31F e da Lei 4591/1964.</p>
                                 <p>Acompanhamento nas reuniões, junto com os membros eleitos. Elaboração de Relatórios ou Ata. Para que a construtora demonstre transparência, nada melhor do que contratar uma empresa para este tipo de serviço ao invés de utilizar de seu jurídico.Por isso a Profi-sindico se adequou a esta modalidade.</p>
                             </div>
                         </div>
@@ -239,194 +302,113 @@
                         <div class="row align-items-center">
                             <div class="col-lg-3 mb-lg-0 mb-5">
                                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Evento 01</a>
-                                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Evento 02</a>
-                                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Evento 03</a>
-                                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Evento 04</a>
+                                    <a class="nav-link active" id="patrimonio-tab" data-toggle="pill" href="#patrimonio" role="tab" aria-controls="patrimonio" aria-selected="true">Patrimônio de Afetação</a>
+                                    <a class="nav-link" id="assessoria-tab" data-toggle="pill" href="#assessoria" role="tab" aria-controls="assessoria" aria-selected="false">Assessoria a entrega de Empreendimentos </a>
+                                    <!-- <a class="nav-link" id="depoimento-tab" data-toggle="pill" href="#depoimento" role="tab" aria-controls="depoimento" aria-selected="false">Depoimento</a> -->
                                 </div>
                             </div>
                             <div class="col-lg-9">
                                 <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <div class="tab-pane fade show active" id="patrimonio" role="tabpanel" aria-labelledby="patrimonio-tab">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <p><strong>Nome - Ano</strong></p>
+                                                <p><strong>Itatiba</strong></p>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
+                                        <a data-toggle="modal" data-target="#eventoItatiba">
+                                            <div class="row">
+                                                <div class="col-lg-3 my-2">
+                                                    <img src="images/img-patrimonio_itatiba-01.jpg" alt="">
+                                                </div>
+                                                <div class="col-lg-3 my-2">
+                                                    <img src="images/img-patrimonio_itatiba-02.jpg" alt="">
+                                                </div>
                                             </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                        </a>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <p><strong>Nome - Ano</strong></p>
+                                                <p><strong>Mogi Guaçu</strong></p>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
+                                        <a data-toggle="modal" data-target="#eventoMogiGuacu">
+                                            <div class="row">
+                                                <div class="col-lg-3 my-2">
+                                                    <img src="images/img-patrimonio_mogiguacu-01.jpg" alt="">
+                                                </div>
+                                                <div class="col-lg-3 my-2">
+                                                    <img src="images/img-patrimonio_mogiguacu-02.jpg" alt="">
+                                                </div>
+                                                <div class="col-lg-3 my-2">
+                                                    <img src="images/img-patrimonio_mogiguacu-03.jpg" alt="">
+                                                </div>
                                             </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                        </div>
+                                        </a>
                                     </div>
-                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p><strong>Nome - Ano</strong></p>
+                                    <div class="tab-pane fade" id="assessoria" role="tabpanel" aria-labelledby="assessoria-tab">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p><strong>Evento Itú</strong></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
+                                            <a data-toggle="modal" data-target="#eventoItu">
+                                                <div class="row">
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_itu-01.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_itu-02.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_itu-03.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_itu-04.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_itu-05.jpg" alt="">
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p><strong>Evento Sumaré 1ª e 2ª fase</strong></p>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                        </div>
+                                            <a data-toggle="modal" data-target="#eventoSumare">
+                                                <div class="row">
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-01.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-02.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-03.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-04.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-05.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-06.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-07.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-08.jpg" alt="">
+                                                    </div>
+                                                    <div class="col-lg-3 my-2">
+                                                        <img src="images/img-evento_sumare-09.jpg" alt="">
+                                                    </div>
+                                                </div>
+                                            </a>
                                     </div>
-                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p><strong>Nome - Ano</strong></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                            <div class="col-lg-3 my-2">
-                                                <img src="http://placehold.it/300x150" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!-- <div class="tab-pane fade" id="depoimento" role="tabpanel" aria-labelledby="depoimento-tab">
+
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -444,132 +426,132 @@
                 <div class="row my-4">
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Mogi Guaçu Paris
+                                    <strong>2019 - 86 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Itatiba Alpes
+                                    <strong>2019 - 197 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Santos Residencial Fortaleza
+                                    <strong>2019 - 144 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Bertioga TG IV
+                                    <strong>2018 - 46 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Itú Bretagne
+                                    <strong>2018 - 144 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Guarujá Condomínio Pardal
+                                    <strong>2017 - 208 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Sumaré Star
+                                    <strong>2016 - 640 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Bertioga Caminhos do Itatinga
+                                    <strong>2015 - 160 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Sumaré Gold
+                                    <strong>2015 - 640 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Bertioga TG III
+                                    <strong>2014 - 152 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-01.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Guarujá Comercial Washington
+                                    <strong>2014 - 152 Unidades</strong>
                                 </p>
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 card-image">
                         <div>
-                            <img src="http://placehold.it/300x150" alt="">
+                            <img src="images/img-trabalhos-02.png" alt="">
                             <a href="">
                                 <p>
-                                    Nome
-                                    <strong>ANO - N Unidades</strong>
+                                    Bertioga TG II
+                                    <strong>2011 - 52 Unidades</strong>
                                 </p>
                             </a>
                         </div>
@@ -586,56 +568,36 @@
                 </div>
                 <div class="row my-5">
                     <div class="col-lg-3 mb-lg-0 mb-5">
-                        <img src="images/img-video-01.png" alt="">
+                        <a data-toggle="modal" data-target="#video-01">
+                            <img src="images/img-video-01.png" alt="">
+                        </a>
                     </div>
                     <div class="col-lg-3 mb-lg-0 mb-5">
-                        <img src="images/img-video-02.png" alt="">
+                        <a data-toggle="modal" data-target="#video-02">
+                            <img src="images/img-video-02.png" alt="">
+                        </a>
                     </div>
                     <div class="col-lg-3 mb-lg-0 mb-5">
-                        <img src="images/img-video-03.png" alt="">
+                        <a data-toggle="modal" data-target="#video-03">
+                            <img src="images/img-video-03.png" alt="">
+                        </a>
                     </div>
                     <div class="col-lg-3 mb-lg-0 mb-5">
-                        <img src="images/img-video-04.png" alt="">
+                        <a data-toggle="modal" data-target="#video-04">
+                            <img src="images/img-video-04.png" alt="">
+                        </a>
                     </div>
                 </div>
                 <div class="row my-5">
                     <div class="col-lg-3">
                         <div class="row align-items-center mb-lg-0 mb-4">
                             <div class="col">
-                                <img src="images/img-midia-01.png" alt="">
+                                <img src="images/img-revista-panamvy-capa.jpg" alt="">
                             </div>
                             <div class="col">
-                                <a href="">Ver materia</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row align-items-center mb-lg-0 mb-4">
-                            <div class="col">
-                                <img src="images/img-midia-02.png" alt="">
-                            </div>
-                            <div class="col">
-                                <a href="">Ver materia</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row align-items-center mb-lg-0 mb-4">
-                            <div class="col">
-                                <img src="images/img-midia-03.png" alt="">
-                            </div>
-                            <div class="col">
-                                <a href="">Ver materia</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row align-items-center mb-lg-0 mb-4">
-                            <div class="col">
-                                <img src="images/img-midia-04.png" alt="">
-                            </div>
-                            <div class="col">
-                                <a href="">Ver materia</a>
+                                <a data-toggle="modal" data-target="#revista-panamby">
+                                    Ver materia
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -653,30 +615,48 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <form action="">
+                                <form role="form" method="post" action="index.php#fale-conosco">
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <input type="text" name="nome" placeholder="Nome">
+                                            <input type="text" id="nome" name="nome" size="40" placeholder="Nome completo"
+                                                value="<?php showPost('nome'); ?>">
+                                            <?php if (isset($errName)) echo "<p class='text-danger'>$errName</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2">
-                                        <div class="col-lg-6 pr-lg-2">
-                                            <input type="email" name="email" placeholder="E-mail">
+                                        <div class="col-lg-4 pr-lg-2">
+                                            <input type="email" id="email" name="email" size="40" placeholder="E-mail"
+                                                value="<?php showPost('email'); ?>">
+                                            <?php if (isset($errEmail)) echo "<p class='text-danger'>$errEmail</p>";?>
                                         </div>
-                                        <div class="col-lg-6 mt-lg-0 mt-2 pl-lg-2">
-                                            <input type="tel" name="tel"  placeholder="Telefone (XX) XXXX-XXXX">
+                                        <div class="col-lg-4 mt-lg-0 mt-2 pl-lg-2 pr-lg-2">
+                                            <input type="tel" id="tel" name="tel" value="<?php showPost('tel'); ?>"
+                                                size="40" placeholder="Telefone" />
+                                        </div>
+                                        <div class="col-lg-4 pl-lg-2">
+                                                <input type="text" id="human" name="human" placeholder="2 + 3 = ?" size="40"
+                                                    value="<?php showPost('human'); ?>">
+                                            <?php if (isset($errHuman)) echo "<p class='text-danger'>$errHuman</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-lg-12">
-                                            <textarea name="message" placeholder="Mensagem" rows="3"></textarea>
+                                            <textarea id="textarea" name="textarea" cols="40" rows="5" placeholder="Mensagem"><?php showPost('message');?></textarea>
+                                            <?php if (isset($errMessage)) echo "<p class='text-danger'>$errMessage</p>";?>
                                         </div>
                                     </div>
                                     <div class="row my-2 mb-lg-0 mb-5">
                                         <div class="col-lg-12">
-                                            <button type="submit" class="btn btn-block btn-primary">
+                                            <button id="submit" name="submit" type="submit" value="Enviar" role="button" class="btn btn-block btn-primary">
                                                 Enviar
                                             </button>
+                                        </div>
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col-lg-12">
+                                            <p>
+                                                <?php if (isset($result)) {echo $result;} ?>
+                                            </p>
                                         </div>
                                     </div>
                                 </form>
@@ -714,6 +694,341 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modais -->
+
+        <!-- Modais - VIDEO 01 -->
+        <div class="modal fade" id="video-01" tabindex="-1" role="dialog" aria-labelledby="video-01" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Depoimento Marta Girardin da Profi-Sindico no Curso de Síndico Profissional</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe src="https://www.youtube.com/embed/STydNEPtAdY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - VIDEO 02 -->
+        <div class="modal fade" id="video-02" tabindex="-1" role="dialog" aria-labelledby="video-02" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Profi-Sindico no Programa "Como Será?" do dia 17/10/2015</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe src="https://www.youtube.com/embed/QdJvF1qu-lw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - VIDEO 03 -->
+        <div class="modal fade" id="video-03" tabindex="-1" role="dialog" aria-labelledby="video-03" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Programa DecorNews 29.08.10 - Sr. Síndico com Profi-Sindico</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe src="https://www.youtube.com/embed/sF-O5DuZW5w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - VIDEO 04 -->
+        <div class="modal fade" id="video-04" tabindex="-1" role="dialog" aria-labelledby="video-04" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Sr. Síndico PROFI-SINDICO</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe src="https://www.youtube.com/embed/cCGvyUxIMNk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Certificados -->
+        <div class="modal fade" id="certificados" tabindex="-1" role="dialog" aria-labelledby="certificados" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Certificados</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <div id="carouseCertificados" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouseCertificados" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carouseCertificados" data-slide-to="1"></li>
+                                        <li data-target="#carouseCertificados" data-slide-to="2"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="images/img-certificado-grande-01.jpg" class="d-block w-100" alt="">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="images/img-certificado-grande-02.jpg" class="d-block w-100" alt="">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="images/img-certificado-grande-03.jpg" class="d-block w-100" alt="">
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouseCertificados" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Anterior</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouseCertificados" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Proximo</span>
+                                    </a>
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Certificados -->
+        <div class="modal fade" id="revista-panamby" tabindex="-1" role="dialog" aria-labelledby="revista-panamby" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Revista Panamby</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="images/img-revista-panamby.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Evento Mogi Guaçu -->
+        <div class="modal fade" id="eventoMogiGuacu" tabindex="-1" role="dialog" aria-labelledby="eventoMogiGuacu" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Evento Mogi Guaçu</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carouseEventoMogiGuacu" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouseEventoMogiGuacu" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouseEventoMogiGuacu" data-slide-to="1"></li>
+                                <li data-target="#carouseEventoMogiGuacu" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="images/img-patrimonio_mogiguacu-01.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-patrimonio_mogiguacu-02.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-patrimonio_mogiguacu-03.jpg" class="d-block w-100" alt="">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouseEventoMogiGuacu" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouseEventoMogiGuacu" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Proximo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Evento Itatiba -->
+        <div class="modal fade" id="eventoItatiba" tabindex="-1" role="dialog" aria-labelledby="eventoItatiba" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Evento Itatiba</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carouseEventoItatiba" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouseEventoItatiba" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouseEventoItatiba" data-slide-to="1"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="images/img-patrimonio_itatiba-01.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-patrimonio_itatiba-02.jpg" class="d-block w-100" alt="">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouseEventoItatiba" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouseEventoItatiba" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Proximo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Evento itu -->
+        <div class="modal fade" id="eventoItu" tabindex="-1" role="dialog" aria-labelledby="eventoItu" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Evento Itu</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carouseEventoItu" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouseEventoItu" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouseEventoItu" data-slide-to="1"></li>
+                                <li data-target="#carouseEventoItu" data-slide-to="2"></li>
+                                <li data-target="#carouseEventoItu" data-slide-to="3"></li>
+                                <li data-target="#carouseEventoItu" data-slide-to="4"></li>
+                                <li data-target="#carouseEventoItu" data-slide-to="5"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="images/img-evento_itu-01.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_itu-02.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_itu-03.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_itu-04.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_itu-05.jpg" class="d-block w-100" alt="">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouseEventoItu" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouseEventoItu" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Proximo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modais - Evento Sumare -->
+        <div class="modal fade" id="eventoSumare" tabindex="-1" role="dialog" aria-labelledby="eventoSumare" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Evento Sumaré 1ª e 2ª fase</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carouselEventoSumare" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselEventoSumare" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="1"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="2"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="3"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="4"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="5"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="6"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="7"></li>
+                                <li data-target="#carouselEventoSumare" data-slide-to="8"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="images/img-evento_sumare-01.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-02.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-03.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-04.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-05.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-06.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-07.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-08.jpg" class="d-block w-100" alt="">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/img-evento_sumare-09.jpg" class="d-block w-100" alt="">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselEventoSumare" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselEventoSumare" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Proximo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <!--build:js js/main.min.js -->
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/modernizr.min.js"></script>
@@ -725,7 +1040,7 @@
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://cdn.jsdelivr.net/g/html5shiv@3.7.3(html5shiv.min.js+html5shiv-printshiv.min.js),respond@1.4.2"></script>
-    <![endif]-->
+        <![endif]-->
 </body>
 
 </html>

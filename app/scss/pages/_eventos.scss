@@ -8,6 +8,10 @@
         color: color(dark);
     }
 
+    p {
+        margin: space(base) 0;
+    }
+
     .nav-link {
         padding: space(base) 0;
 
@@ -17,5 +21,11 @@
             background-color: inherit;
             color: color(dark);
         }
+    }
+
+    .tab-content {
+        overflow-y: scroll;
+
+        height: 450px;
     }
 }

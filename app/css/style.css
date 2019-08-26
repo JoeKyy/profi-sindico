@@ -353,9 +353,11 @@ section#servicos, section#trabalhos-realizados, section#fale-conosco {
         display: flex;
         align-items: center;
         justify-content: center;
+        max-height: 95%;
         background: rgba(37, 41, 51, 0.5); }
         section#servicos .card-image div a p, section#trabalhos-realizados .card-image div a p, section#fale-conosco .card-image div a p {
-          font-size: 1.125rem;
+          margin: 0;
+          font-size: 0.875rem;
           text-align: center;
           color: #ffffff; }
           section#servicos .card-image div a p strong, section#trabalhos-realizados .card-image div a p strong, section#fale-conosco .card-image div a p strong {
@@ -367,6 +369,8 @@ section#eventos {
   color: #252933; }
   section#eventos h2 {
     color: #252933; }
+  section#eventos p {
+    margin: 16px 0; }
   section#eventos .nav-link {
     padding: 16px 0; }
     section#eventos .nav-link.active {
@@ -374,6 +378,9 @@ section#eventos {
       font-weight: 700;
       background-color: inherit;
       color: #252933; }
+  section#eventos .tab-content {
+    overflow-y: scroll;
+    height: 450px; }
 
 section#sobre-nos {
   margin-top: -8px;
