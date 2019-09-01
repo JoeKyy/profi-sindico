@@ -242,7 +242,11 @@ header {
     width: 259px;
     height: 58px;
     overflow: hidden;
-    text-indent: -9999px; }
+    text-indent: -9999px;
+    margin: 0 auto; }
+    @media (min-width: 75em) {
+      header h1 {
+        margin: inherit; } }
   header nav {
     position: absolute;
     top: -1000em;
@@ -309,6 +313,11 @@ section#topo {
   @media (min-width: 48.0625em) {
     section#topo {
       overflow: inherit; } }
+  section#topo h2 {
+    margin: -48px 0 16px; }
+    @media (min-width: 48.0625em) {
+      section#topo h2 {
+        margin: 16px 0; } }
   section#topo img {
     max-width: inherit;
     width: inherit; }
@@ -353,7 +362,7 @@ section#servicos, section#trabalhos-realizados, section#fale-conosco {
         display: flex;
         align-items: center;
         justify-content: center;
-        max-height: 95%;
+        max-height: 100%;
         background: rgba(37, 41, 51, 0.5); }
         section#servicos .card-image div a p, section#trabalhos-realizados .card-image div a p, section#fale-conosco .card-image div a p {
           margin: 0;

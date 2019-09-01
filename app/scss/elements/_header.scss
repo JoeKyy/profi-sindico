@@ -18,6 +18,12 @@ header {
         @include font(medium);
         @include sprite($logo);
         @include hidden-text();
+
+        @include responsive(large) {
+            margin: inherit;
+        }
+
+        margin: 0 auto;
     }
 
     nav {

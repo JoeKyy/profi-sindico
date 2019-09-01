@@ -9,6 +9,14 @@
 
     width: 100%;
 
+    h2 {
+        @include responsive(medium) {
+            margin: space(base) 0;
+        }
+
+        margin: - space(gg) 0 space(base);
+    }
+
     img {
         @include responsive(medium) {
             max-width: 100%;
