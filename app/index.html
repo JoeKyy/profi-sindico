@@ -1,6 +1,7 @@
 <?php
    error_reporting( E_ALL );
    ini_set( 'display_errors', 1 );
+   ini_set( 'default_charset', 'utf-8');
 
    if (isset($_POST["submit"])) {
       // Variáveis do Formulário Form
@@ -23,19 +24,17 @@
       $mail->Username = 'profi-sindico@profi-sindico.com.br';     // Usuário do servidor SMTP - IMPORTANTE - ATIVAR o acesso a aplicativos menos seguros da sua conta GMAIL
       $mail->Password = 'lulu12';                               // Senha do servidor SMTP
       $mail->port = 587;                                          // Autenticação 587 para conexões TLS 587 se for SSL é 465
-      //$mail->SMTPSecure = 'tls';                                  // Autenticação 587 TLS
+      $mail->SMTPSecure = 'tls';                                  // Autenticação 587 TLS
 
       // Define o remetente.
       $mail->From     = "profi-sindico@profi-sindico.com.br";     // Seu e-mail
-      $mail->FromName = "Profi-Sindico";                       // Nome do disparo
+      $mail->FromName = "DISPARO DE EMAIL";                       // Nome do disparo
 
       // Variáveis dos destinatário(s)
-      $destinatario1 = "profi-sindico@profi-sindico.com.br";
-      $destinatario2 = "jhomar.nando@gmail.com";
+      $destinatario1 = "jhomar.nando@gmail.com";
 
       // Define os destinatário(s)
       $mail->AddAddress($destinatario1);
-      $mail->AddAddress($destinatario2);
 
       // DEFININDO OS DADOS DO E-MAIL, ASSUNTO E MENSAGEM
 
@@ -44,10 +43,10 @@
       $mail->Subject = "[Contato] Profi-Sindico";  // Assunto predefininido e Cliente preenchido.
       // HTML do corpo do e-mail definindo que Nome, e-mail, telefone e mensagem apareceram no corpo.
       $mail->Body    = "
-                        De: $name\n
-                        E-mail: $email\n
-                        Telefone: $tel\n
-                        Mensagem:\n$message
+                        <h2>Nome do Cliente: $nome</h2>
+                        <h3>Email do cliente: $email<h3/>
+                        <h3>TELEFONE/CELULAR: $telefone</h3><br/>
+                        <h2> Mensagem: $mensagem</h2>
       ";
 
       // Envia o e-mail
