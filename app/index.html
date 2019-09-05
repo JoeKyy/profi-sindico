@@ -1,67 +1,91 @@
 <?php
-    error_reporting( E_ALL );
-    ini_set( 'display_errors', 1 );
-	if (isset($_POST["submit"])) {
-		$name = $_POST['nome'];
-		$email = $_POST['email'];
-		$tel = $_POST['tel'];
-		$message = $_POST['textarea'];
-		$human = intval($_POST['human']);
-		$from = $_POST['email'];
-		$to = 'contato@joekyy.com.br';
-		$subject = '[Contato] Profi-Sindico';
-        $headers = 'From: '.$from."\r\n".'Reply-To: '.$from."\r\n" .'X-Mailer: PHP/' . phpversion();
+   error_reporting( E_ALL );
+   ini_set( 'display_errors', 1 );
 
-		$body ="De: $name\nE-mail: $email\nTelefone: $tel\nMensagem:\n$message";
-        // Check if name has been entered
-        // Check if name has been entered
-        if (!isset($_POST) || !key_exists('nome', $_POST)) {
-            $errName = 'Verifique seu nome';
-        }
+   if (isset($_POST["submit"])) {
+      // Variáveis do Formulário Form
+      $nome       = $_POST["nome"];
+      $email      = $_POST["email"];
+      $telefone   = $_POST["tel"];
+      $mensagem   = $_POST["textarea"];
+      $human      = intval($_POST['human']);
 
-		// Check if email has been entered and is valid
-        if (!isset($_POST) || !key_exists('email', $_POST) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $errEmail = 'Digite um email valido';
-        }
+      // Inclui o arquivo class.phpmailer.php localizado na pasta phpmailer
+      include("class.phpmailer.php");
 
-        //Check if message has been entered
-        if (!isset($_POST) || !key_exists('textarea', $_POST)) {
-            $errMessage = 'Escreva sua mensagem';
-        }
-		//Check if simple anti-bot test is correct
-        if (!isset($human) || $human !== 5) {
-            $errHuman = 'Sua resposta está incorreta';
-        }
-        // If there are no errors, send the email
-        if (!isset($errName) && !isset($errEmail) && !isset($errMessage) && !isset($errHuman)) {
-            $result = mail($to, $subject, $body, $headers);
-            if (isset($result)) {
-                $result = '<div class="alert alert-success">Obrigado, entraremos em contato</div>';
-            } else {
-                $result = '<div class="alert alert-danger">Desculpe, ocorreu um erro em sua mensagem, por favor, tente novamente mais tarde.</div>';
-            }
-        }
-    }
+      // Inicia a classe PHPMailer
+      $mail = new PHPMailer();
 
-    /**
-     * if you want to send real mail, substitute mail for fakemail
-     * with the same parameters.
-     *
-     * @param $to
-     * @param $subject
-     * @param $body
-     * @param $from
-     * @return string faking mail output.
-     */
-    function fakemail($to, $subject, $body, $from) {
-        $result = "<br/>Sending email to $to from $from with subject $subject and body <p>$body</p>";
-        return $result;
-    }
-    function showPost($name) {
-        if (isset($_POST[$name])) {
-            echo htmlspecialchars($_POST[$name]);
-        }
-    }
+      // Define os dados do servidor e tipo de conexão - NESTE CASO USAREMOS O GMAIL
+      $mail->IsSMTP();
+      $mail->Host     = "smtp.profi-sindico.com.br";              // Endereço do servidor SMTP
+      $mail->SMTPAuth = true;                                     // Usa autenticação SMTP? (opcional)
+      $mail->Username = 'profi-sindico@profi-sindico.com.br';     // Usuário do servidor SMTP - IMPORTANTE - ATIVAR o acesso a aplicativos menos seguros da sua conta GMAIL
+      $mail->Password = 'lulu12';                               // Senha do servidor SMTP
+      $mail->port = 587;                                          // Autenticação 587 para conexões TLS 587 se for SSL é 465
+      //$mail->SMTPSecure = 'tls';                                  // Autenticação 587 TLS
+
+      // Define o remetente.
+      $mail->From     = "profi-sindico@profi-sindico.com.br";     // Seu e-mail
+      $mail->FromName = "Profi-Sindico";                       // Nome do disparo
+
+      // Variáveis dos destinatário(s)
+      $destinatario1 = "profi-sindico@profi-sindico.com.br";
+      $destinatario2 = "jhomar.nando@gmail.com";
+
+      // Define os destinatário(s)
+      $mail->AddAddress($destinatario1);
+      $mail->AddAddress($destinatario2);
+
+      // DEFININDO OS DADOS DO E-MAIL, ASSUNTO E MENSAGEM
+
+      // Corpo da Mensagem
+      $mail->IsHTML(true); // Define que o e-mail será enviado em código HTML
+      $mail->Subject = "[Contato] Profi-Sindico";  // Assunto predefininido e Cliente preenchido.
+      // HTML do corpo do e-mail definindo que Nome, e-mail, telefone e mensagem apareceram no corpo.
+      $mail->Body    = "
+                        De: $name\n
+                        E-mail: $email\n
+                        Telefone: $tel\n
+                        Mensagem:\n$message
+      ";
+
+      // Envia o e-mail
+      $enviado = $mail->Send();
+
+      // Exibe uma mensagem de resultado
+      if (!isset($_POST) || !key_exists('nome', $_POST)) {
+         $errName = 'Verifique seu nome';
+      }
+
+      if (!isset($_POST) || !key_exists('email', $_POST) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+         $errEmail = 'Digite um email valido';
+      }
+
+      if (!isset($_POST) || !key_exists('textarea', $_POST)) {
+         $errMessage = 'Escreva sua mensagem';
+      }
+
+      if (!isset($human) || $human !== 5) {
+         $errHuman = 'Sua resposta está incorreta';
+      }
+
+      if (!isset($errName) && !isset($errEmail) && !isset($errMessage) && !isset($errHuman)) {
+         $enviado = $mail->Send();
+         $enviado = true;
+         if (isset($enviado)) {
+            $enviado = '<div class="alert alert-success">Obrigado, entraremos em contato</div>';
+         } else {
+            $enviado = '<div class="alert alert-danger">Desculpe, ocorreu um erro em sua mensagem, por favor, tente novamente mais tarde.</div>';
+         }
+      }
+   }
+
+   function showPost($name) {
+      if (isset($_POST[$name])) {
+         echo htmlspecialchars($_POST[$name]);
+      }
+   }
 ?>
 
 <!DOCTYPE html>
